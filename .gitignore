@@ -1,0 +1,15 @@
+# 构建产物
+/dist/
+*.so
+*.h
+workbuddy
+# go build ./... 在模块根目录为 main 包生成的同名可执行文件
+/plugin
+
+# 本地探针与临时文件
+zz_probe_test.go
+*.bak-*
+cpap-plugin-workbuddy
+
+# 旧仓库（workbuddy-plugin）的完整 git 历史归档
+legacy-history.bundle

@@ -1,0 +1,83 @@
+{
+  "_comment": [
+    "模型注册排除清单。随插件编译嵌入，运行时零 IO。",
+    "",
+    "为什么用清单而不是正则：这里要剔除的是已知的具体模型，不是某个语法模式。",
+    "用正则等于在猜上游以后会起什么名字——上游一旦出现 glm-5.30 或 kimi-k2.60",
+    "这类新写法就会被误判。清单的行为完全可预测，改动只需往表里加一行。",
+    "",
+    "匹配口径：注册名转小写后精确匹配。不做前缀、通配或版本号推导。",
+    "清单外的模型一律保留：宁可多给一个，也不要把新模型误判成旧模型删掉。"
+  ],
+  "abstract": {
+    "_comment": [
+      "抽象档位：服务端按账号等级与实时负载动态选模型的路由别名。",
+      "客户端与服务端都不暴露它本次落到哪个具体模型（AUTO_TIER_MODELS 只有",
+      "价格档位，vendor 字段在本地 product.json 与服务端 /v3/config 之间还不",
+      "一致），注册它们会让插件侧的限流、路由与用量统计落在一个无法解释的名字上。"
+    ],
+    "ids": [
+      "auto",
+      "default",
+      "default-model",
+      "fast-model",
+      "balanced-model",
+      "primary-model",
+      "deep-model"
+    ]
+  },
+  "legacy": {
+    "_comment": [
+      "过旧模型：上游仍下发是为了旧客户端兼容，但新会话没有理由再用。",
+      "GLM：5.2 及以前，含 5.0 / 5.1 / 4.x，以及视觉系列 glm-5v-turbo",
+      "（它属于 GLM-5 代次，不能因为带了个 v 就绕过）。",
+      "Kimi：K2.6 及以前，含 K2.5 / K2-thinking / K2-instruct。"
+    ],
+    "ids": [
+      "glm-4.6",
+      "glm-4.6v",
+      "glm-4.7",
+      "glm-5",
+      "glm-5.0",
+      "glm-5.0-turbo",
+      "glm-5.1",
+      "glm-5.2",
+      "glm-5v-turbo",
+      "kimi-k2",
+      "kimi-k2-instruct",
+      "kimi-k2-instruct-taiji",
+      "kimi-k2-thinking",
+      "kimi-k2.5",
+      "kimi-k2.6"
+    ]
+  },
+  "minimax": {
+    "_comment": [
+      "MiniMax 系列全部不注册。",
+      "清单是逐个 ID 列的，所以上游每次发新代次都要补一行——",
+      "这是刻意的取舍：正则会把 minimax-m3.10 之类的未来写法也一并命中。",
+      "2026-10 补入 m3.1 系列（上游新发的 minimax-m3.1-flash）。"
+    ],
+    "ids": [
+      "minimax",
+      "minimax-m2.5",
+      "minimax-m2.7",
+      "minimax-m3",
+      "minimax-m3-pay",
+      "minimax-m3.1-flash",
+      "minimax-m3.1"
+    ]
+  },
+  "product": {
+    "_comment": [
+      "产品策略排除：这些模型在上游目录里存在，但按当前运营决定不注册。",
+      "与 legacy 组分开，是因为它们不是「过旧」，而是「明确不要」。",
+      "space-bunny：上游匿名模型，暂不使用。",
+      "kimi-k3-1：与 kimi-k3.1-pro 重叠，保留后者。"
+    ],
+    "ids": [
+      "space-bunny",
+      "kimi-k3-1"
+    ]
+  }
+}
